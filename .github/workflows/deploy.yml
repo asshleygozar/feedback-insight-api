@@ -47,5 +47,5 @@ jobs:
         env:
           HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY}}
         run: |
-          sudo curl https://heroku.com | sh
+          curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
           heroku container:release web --app feedback-insight-api
