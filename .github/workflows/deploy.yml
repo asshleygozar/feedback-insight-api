@@ -40,7 +40,7 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{github.repository_owner}}/feedback-insight-api:latest
-            ://heroku.com/feedback-insight-api/web
+            registry.heroku.com/feedback-insight-api/web
 
         # Deploying to Heroku
       - name: Deploy to Heroku
