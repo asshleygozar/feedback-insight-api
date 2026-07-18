@@ -28,7 +28,7 @@ jobs:
       - name: Log in to Heroku
         uses: docker/login-action@v3
         with:
-          registry: ://heroku.com
+          registry: registry.heroku.com
           username: '_'
           password: ${{secrets.HEROKU_API_KEY}}
 
