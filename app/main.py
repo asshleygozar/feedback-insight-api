@@ -4,11 +4,9 @@ import uvicorn
 
 app = FastAPI()
 
-
-@app.get('/')
-def home():
-    return {"message": "Welcome to the Feedback Insights API!"}
-
+@app.get('/health')
+def health():
+    return {"status": "healthy"}
 
 if __name__ == "__main__":
     uvicorn.run(
