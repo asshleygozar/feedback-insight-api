@@ -1,10 +1,17 @@
 import uvicorn
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
 from app.api.v1 import v1_router
-from app.core import settings, AppSettings
+from app.core import settings
+from app.core import load_ai_client
 
 
-app = FastAPI(title=settings.APP_NAME, version="1.0.0", description="AI Powered API for feedback insights")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    load_ai_client()
+    yield
+
+app = FastAPI(title=settings.APP_NAME, version="1.0.0", description="AI Powered API for feedback insights", lifespan=lifespan)
 
 app.include_router(v1_router, prefix="/api/v1")
 
