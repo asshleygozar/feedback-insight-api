@@ -18,13 +18,13 @@ RUN uv sync --frozen
 # Stage FINAL RUNNER
 FROM python:3.12-slim AS runner
 WORKDIR /app
-COPY --from=builder /app/app /app
+COPY --from=builder /app/app /app/app
 COPY --from=builder /app/.venv /app/.venv
 
 ENV PATH="/app/.venv/bin:$PATH"
 ENV PORT=8000
 
-CMD ["sh","-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT}" ]
+CMD ["sh","-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT}" ]
 
 
 
