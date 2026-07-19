@@ -5,6 +5,7 @@ An AI powered api server that takes single or batch like input of likert scale a
 I built this project to deepen my understanding of fundamentals of Applied AI Engineering. The idea came from my previous capstone research project where I have integrated sentiment analysis for student satisfaction survey where our backend analyze and understand sentiment feedback from the students and return categorized and structurized response for a thorough understanding of students thoughts and experiences.
 
 ## Technology Stack
+
 This project is built thanks to the following technologies
 
 **Backend Technologies**
@@ -13,12 +14,18 @@ This project is built thanks to the following technologies
 - FastAPI v0.139.2 (Server Framework)
 - Uvicorn v0.51.0" (ASGI Web server)
 
+**Large Language Model (LLM)**
+
+- Google Gemini API (LLM)
+- Google Gemini SDK (For using gemini llm specific)
+
 **CI/CD**
 
 - Docker (For containerization and portability)
 - Github Actions (Automation of deployment)
 
 ## Functionalities
+
 - Analyzes single object feedback consisting of open-ended response with likert scale with label and weight points
 - Batch analysis of array of object of feedback consisting of open-ended responses and liker scales with label and weight points from different respondees
 
