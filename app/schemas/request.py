@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, field_validator
 from pydantic_core import PydanticCustomError
-class LikertScale(BaseModel):
+class LikertScore(BaseModel):
     question: str = Field(..., min_length=5)
     points: int
 
@@ -10,20 +10,10 @@ class LikertScale(BaseModel):
             raise PydanticCustomError("points_range_error", "Points must be between 1 and 7")
         return value
 
-class LikertScaleWithWeight(BaseModel):
-    weight: int  
-    likert_score: LikertScale
-
-    @field_validator("weight")
-    def validate_weight(cls, value):
-        if value < 1 or value > 7:
-            raise PydanticCustomError("weight_range_error","Weight must be between 1 and 7")
-        return value
-
 class FeedbackRequest(BaseModel):
     id: str
     open_ended_answer: str
-    likert_scale: LikertScaleWithWeight
+    likert_score: LikertScore
 
     @field_validator('open_ended_answer')
     def validate_open_ended_answer(cls, value):
