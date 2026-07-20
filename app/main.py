@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.api.v1 import v1_router
 from app.core import settings
-from app.core import load_ai_client
+from app.core import load_ai_client, ai_client
 
 
 @asynccontextmanager
@@ -17,7 +17,9 @@ app.include_router(v1_router, prefix="/api/v1")
 
 @app.get('/health')
 def health():
-    return {"status": "healthy"}
+    if ai_client is None:
+        return {"status": "unhealthy", "ai_client_loaded": False}
+    return {"status": "healthy", "ai_client_loaded": True}
 
 if __name__ == "__main__":
     uvicorn.run(
