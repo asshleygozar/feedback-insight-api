@@ -22,15 +22,8 @@ app = FastAPI(title=settings.APP_NAME, version="1.0.0", description="AI Powered 
 @app.exception_handler(GeminiAPIError)
 async def gemini_exception_handler(request: Request, exc: GeminiAPIError):
     upstream_status = getattr(exc, 'code', 500)
+    detail = getattr(exc, 'message', 'An error occurred while communicating with the Gemini API.')
 
-    if upstream_status == 503:
-        detail = "The Gemini API is currently unavailable. Please try again later."
-    elif upstream_status == 429:
-        detail = "Rate limit exceeded. Please slow down your requests."
-    elif upstream_status == 404:
-        detail = "Gemini model not found. Please check the model name and try again."
-    else:
-        detail = "An error occurred while communicating with the Gemini API." 
     return JSONResponse(
         status_code=upstream_status,
         content={
