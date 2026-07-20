@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import ValidationError
-from app.schemas import FeedbackRequest, FeedbackResponse
+from app.schemas import FeedbackRequest, BatchFeedbackRequest, FeedbackResponse
 from app.services import AIService
 
 router = APIRouter()
@@ -16,3 +15,15 @@ def analyze(data: FeedbackRequest, ai_service: AIService = Depends()) -> Feedbac
         return response
     except Exception as error:
         raise HTTPException(status_code=500, detail='An unexpected error occured while analyzing your feedback.')
+
+@router.post('/batch-analyze')
+def batch_analyze(data: BatchFeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
+    try:
+        responses = ai_service.batch_analyze_feedbacks(data)
+
+        if responses is None:
+            raise HTTPException(status_code=500, detail="Failed to analyze feedbacks.")
+
+        return responses
+    except Exception as error:
+        raise HTTPException(status_code=500, detail='An unexpected error occured while analyzing your feedbacks.')
