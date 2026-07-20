@@ -13,7 +13,7 @@ class AIService:
         prompt = build_single_sentiment_prompt(data)
 
         response = ai_client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.5-flash",
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
@@ -34,7 +34,7 @@ class AIService:
         prompt = build_batch_sentiment_prompt(data)
 
         response = ai_client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.5-flash",
             contents=prompt,
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",

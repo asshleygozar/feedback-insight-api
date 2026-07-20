@@ -6,24 +6,22 @@ router = APIRouter()
 
 @router.post('/analyze')
 def analyze(data: FeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
-    try:
-        response = ai_service.analyze_feedback(data)
+    
+    response = ai_service.analyze_feedback(data)
 
-        if response is None:
-            raise HTTPException(status_code=500, detail="Failed to analyze feedback.")
+    if response is None:
+        raise HTTPException(status_code=500, detail="Failed to analyze feedback.")
 
-        return response
-    except Exception as error:
-        raise HTTPException(status_code=500, detail='An unexpected error occured while analyzing your feedback.')
+    return response
+    
 
 @router.post('/batch-analyze')
 def batch_analyze(data: BatchFeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
-    try:
-        responses = ai_service.batch_analyze_feedbacks(data)
+    
+    responses = ai_service.batch_analyze_feedbacks(data)
 
-        if responses is None:
-            raise HTTPException(status_code=500, detail="Failed to analyze feedbacks.")
+    if responses is None:
+        raise HTTPException(status_code=500, detail="Failed to analyze feedbacks.")
 
-        return responses
-    except Exception as error:
-        raise HTTPException(status_code=500, detail='An unexpected error occured while analyzing your feedbacks.')
+    return responses
+    

@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
+from google.genai.errors import APIError as GeminiAPIError
 from contextlib import asynccontextmanager
 from app.api.v1 import v1_router
 from app.core import settings
@@ -16,6 +17,31 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(title=settings.APP_NAME, version="1.0.0", description="AI Powered API for feedback insights", lifespan=lifespan)
+
+# Global exception handler for Gemini API Errors
+@app.exception_handler(GeminiAPIError)
+async def gemini_exception_handler(request: Request, exc: GeminiAPIError):
+    upstream_status = getattr(exc, 'code', 500)
+
+    if upstream_status == 503:
+        detail = "The Gemini API is currently unavailable. Please try again later."
+    elif upstream_status == 429:
+        detail = "Rate limit exceeded. Please slow down your requests."
+    elif upstream_status == 404:
+        detail = "Gemini model not found. Please check the model name and try again."
+    else:
+        detail = "An error occurred while communicating with the Gemini API." 
+    return JSONResponse(
+        status_code=upstream_status,
+        content={
+            "type": "about:blank",
+            "title": "Gemini Service Error",
+            "status": upstream_status,
+            "detail": detail,
+            "instance": request.url.path
+        }
+    )
+
 
 # Global exception handler for HTTP Exceptions such as 400 plus and 500 plus errors
 @app.exception_handler(StarletteHTTPException)
