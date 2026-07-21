@@ -8,6 +8,7 @@ dependencies = [
     "fastapi[standard]>=0.139.2",
     "google-genai>=2.12.1",
     "pydantic-settings>=2.14.2",
+    "python-json-logger>=4.1.0",
     "slowapi>=0.1.10",
     "uvicorn>=0.51.0",
 ]
