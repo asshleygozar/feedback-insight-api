@@ -7,7 +7,7 @@ router = APIRouter()
 
 @router.post('/analyze')
 @limiter.limit("5/minute")  # 5 request per minute because ai token is expensive
-def analyze(request: Request, data: FeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
+async def analyze(request: Request, data: FeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
     
     response = ai_service.analyze_feedback(data)
 
@@ -19,7 +19,7 @@ def analyze(request: Request, data: FeedbackRequest, ai_service: AIService = Dep
 
 @router.post('/batch-analyze')
 @limiter.limit("5/minute") 
-def batch_analyze(request: Request, data: BatchFeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
+async def batch_analyze(request: Request, data: BatchFeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
     
     responses = ai_service.batch_analyze_feedbacks(data)
 
