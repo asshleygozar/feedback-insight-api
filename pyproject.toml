@@ -12,3 +12,8 @@ dependencies = [
     "slowapi>=0.1.10",
     "uvicorn>=0.51.0",
 ]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.22",
+]
