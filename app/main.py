@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, Depends
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -6,7 +6,7 @@ from google.genai.errors import APIError as GeminiAPIError
 from contextlib import asynccontextmanager
 from app.api.v1 import v1_router
 from app.core import settings
-from app.core import load_ai_client, ai_client
+from app.core import load_ai_client, ai_client, authentication
 import uvicorn
 import http
 
@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
     load_ai_client()
     yield
 
-app = FastAPI(title=settings.APP_NAME, version="1.0.0", description="AI Powered API for feedback insights", lifespan=lifespan)
+app = FastAPI(title=settings.APP_NAME, version="1.0.0", description="AI Powered API for feedback insights", lifespan=lifespan, dependencies=[Depends(authentication.verify_api_key)])
 
 # Global exception handler for Gemini API Errors
 @app.exception_handler(GeminiAPIError)
