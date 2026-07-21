@@ -1,11 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from app.schemas import FeedbackRequest, BatchFeedbackRequest, FeedbackResponse
 from app.services import AIService
+from app.core import limiter
 
 router = APIRouter()
 
 @router.post('/analyze')
-def analyze(data: FeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
+@limiter.limit("5/minute")  # 5 request per minute because ai token is expensive
+def analyze(request: Request, data: FeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
     
     response = ai_service.analyze_feedback(data)
 
@@ -16,7 +18,8 @@ def analyze(data: FeedbackRequest, ai_service: AIService = Depends()) -> Feedbac
     
 
 @router.post('/batch-analyze')
-def batch_analyze(data: BatchFeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
+@limiter.limit("5/minute") 
+def batch_analyze(request: Request, data: BatchFeedbackRequest, ai_service: AIService = Depends()) -> FeedbackResponse:
     
     responses = ai_service.batch_analyze_feedbacks(data)
 

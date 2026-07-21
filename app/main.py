@@ -4,9 +4,11 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from google.genai.errors import APIError as GeminiAPIError
 from contextlib import asynccontextmanager
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from app.api.v1 import v1_router
 from app.core import settings
-from app.core import load_ai_client, ai_client, authentication
+from app.core import load_ai_client, ai_client, authentication, limiter
 import uvicorn
 import http
 
@@ -16,7 +18,28 @@ async def lifespan(app: FastAPI):
     load_ai_client()
     yield
 
+
 app = FastAPI(title=settings.APP_NAME, version="1.0.0", description="AI Powered API for feedback insights", lifespan=lifespan, dependencies=[Depends(authentication.verify_api_key)])
+
+# For accessing rate limit to routers
+app.state.limiter = limiter
+
+# For automatic injection of X-RateLimit headers to the responses
+app.add_middleware(SlowAPIMiddleware)
+
+# Rate limiter exception handler
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+        content={
+            "type":"about:blank",
+            "title":"Too Many Requests",
+            "status": status.HTTP_429_TOO_MANY_REQUESTS,
+            "detail": "You have exceeded the rate limit. Please try again later.",
+            "instance": request.url.path
+        }
+    )
 
 # Global exception handler for Gemini API Errors
 @app.exception_handler(GeminiAPIError)
