@@ -9,11 +9,11 @@ class AppSettings(BaseSettings):
     GEMINI_API_KEY: str = Field(default=...)
     API_SECRET_KEY: str = Field(default=..., min_length=32, max_length=64)
     API_ORIGIN: str = Field(default=..., min_length=10)
-    ENVIRONMENT: str = Field(default="development", min_length=3, max_length=20)
+    APP_STAGE: str = Field(default="development", min_length=3, max_length=20)
 
     @property
     def is_production(self) -> bool:
-        return self.ENVIRONMENT.lower() == "production"
+        return self.APP_STAGE.lower() == "production"
 
     model_config = SettingsConfigDict(env_file=f"{base_dir}/.env", env_file_encoding="utf-8", extra="ignore")
 
