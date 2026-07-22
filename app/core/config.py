@@ -4,6 +4,7 @@ from pydantic import Field, field_validator
 
 base_dir = Path(__file__).resolve().parent.parent.parent
 
+
 class AppSettings(BaseSettings):
     APP_NAME: str = "Feedback-Insights-API"
     GEMINI_API_KEY: str = Field(default=...)
@@ -15,6 +16,9 @@ class AppSettings(BaseSettings):
     def is_production(self) -> bool:
         return self.APP_STAGE.lower() == "production"
 
-    model_config = SettingsConfigDict(env_file=f"{base_dir}/.env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=f"{base_dir}/.env", env_file_encoding="utf-8", extra="ignore"
+    )
 
-settings = AppSettings() 
+
+settings = AppSettings()

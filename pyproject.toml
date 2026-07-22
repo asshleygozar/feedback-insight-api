@@ -17,3 +17,14 @@ dependencies = [
 dev = [
     "ruff>=0.15.22",
 ]
+
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "E", 
+    "F",
+    "I"
+]

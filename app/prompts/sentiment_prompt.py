@@ -1,7 +1,8 @@
 from app.schemas import FeedbackRequest, BatchFeedbackRequest
 
+
 def build_single_sentiment_prompt(data: FeedbackRequest):
-    prompt = f'''
+    prompt = f"""
 
         Here are the feedback responses {data}
 
@@ -22,11 +23,12 @@ def build_single_sentiment_prompt(data: FeedbackRequest):
             "top_praises": list["string"],
             "top_concerns": list["string"]
         }}
-        '''
+        """
     return prompt
 
+
 def build_batch_sentiment_prompt(data: BatchFeedbackRequest):
-    prompt = f'''
+    prompt = f"""
 
         Here are the batch feedback responses {data}
 
@@ -47,5 +49,5 @@ def build_batch_sentiment_prompt(data: BatchFeedbackRequest):
             "top_praises": list["string"],
             "top_concerns": list["string"]
         }}
-        '''
+        """
     return prompt

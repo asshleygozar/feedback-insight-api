@@ -1,6 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel
 
+
 class Sentiment(str, Enum):
     POSITIVE = "positive"
     NEGATIVE = "negative"
@@ -13,6 +14,3 @@ class FeedbackResponse(BaseModel):
     summary: str
     top_praises: list[str]
     top_concerns: list[str]
-
-
-    
